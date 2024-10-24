@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Booking Success</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Booking Successful</h2>
+        <p class="lead">Thank you, <span th:text="${booking.name}"></span>, your ticket has been booked!</p>
+        <ul class="booking-details">
+            <li><strong>Bus Number:</strong> <span th:text="${booking.busNumber}" style="color: #7777e2;"></span></li>
+            <li><strong>Travel Date:</strong> <span th:text="${booking.date}" style="color: #7777e2;"></span></li>
+            <li><strong>Seat Number:</strong> <span th:text="${booking.seatNumber}" style="color: #7777e2;"></span></li>
+        </ul>
+        <a href="/" class="btn">Go back to Home</a>
+        <div class="image-container">
+            <img src="/images/generic_banner_Ind.png" alt="Bus Image">
+        </div>
+    </div>
+</body>
+</html>

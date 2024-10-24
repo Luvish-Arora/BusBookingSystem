@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Seat Selection</title>
+  <link rel="stylesheet" href="/css/styles1.css">
+</head>
+<body>
+    <div class="bus-container">
+        <div class="bus-header">Head of the Bus</div>
+        
+        
+
+        <div class="bus-head">
+            <div class="door"></div>
+            <button class="driver-seat" disabled>Driver</button>
+        </div>
+
+        <div class="bus-body">
+            <!-- Same seat rows as before -->
+            <div class="seat-row">
+                <button class="seat window-seat">1</button>
+                <button class="seat booked" disabled>2</button>
+                <button class="seat">3</button>
+                <button class="seat window-seat">4</button>
+            </div>
+            <div class="seat-row">
+                <button class="seat window-seat">5</button>
+                <button class="seat">6</button>
+                <button class="seat">7</button>
+                <button class="seat window-seat">8</button>
+            </div>
+            <div class="seat-row">
+                <button class="seat window-seat">9</button>
+                <button class="seat">10</button>
+                <button class="seat">11</button>
+                <button class="seat window-seat">12</button>
+            </div>
+            <div class="seat-row">
+                <button class="seat window-seat">13</button>
+                <button class="seat">14</button>
+                <button class="seat">15</button>
+                <button class="seat window-seat">16</button>
+            </div>
+            <div class="seat-row">
+                <button class="seat window-seat">17</button>
+                <button class="seat">18</button>
+                <button class="seat">19</button>
+                <button class="seat window-seat">20</button>
+            </div>
+            <div class="seat-row">
+                <button class="seat window-seat">21</button>
+                <button class="seat">22</button>
+                <button class="seat">23</button>
+                <button class="seat window-seat">24</button>
+            </div>
+        </div>
+
+        <div class="bus-footer">Tail of the Bus</div>
+        
+        
+    </div>
+
+    <div class="summary-container">
+        <div class="summary">
+            <p>Total Price: <span id="total-price">0</span></p>
+            <p>Selected Seat(s): <span id="selected-seat">None</span></p>
+        </div>
+    </div>
+
+    <!-- Your seat buttons and summary code remains the same -->
+
+<form action="/confirmSeat" method="post">
+    <input type="hidden" id="seatNumber" name="seatNumber" value="">
+    <input type="hidden" id="totalPayment" name="totalPayment" value="">
+    <button type="submit" class="btn">Confirm and Pay</button>
+</form>
+
+<script>
+    const seats = document.querySelectorAll('.seat:not(.booked)');
+    let totalPrice = 0;
+    let selectedSeats = [];
+
+    seats.forEach(seat => {
+        seat.addEventListener('click', () => {
+            const seatNumber = seat.textContent;
+            const price = seat.classList.contains('window-seat') ? 200 : 100;
+            const seatLabel = seat.classList.contains('window-seat') ? `${seatNumber}(w)` : seatNumber;
+
+            if (!seat.classList.contains('selected')) {
+                seat.classList.add('selected');
+                totalPrice += price;
+                selectedSeats.push(seatLabel);
+            } else {
+                seat.classList.remove('selected');
+                totalPrice -= price;
+                selectedSeats = selectedSeats.filter(num => num !== seatLabel);
+            }
+
+            document.getElementById('total-price').textContent = totalPrice;
+            document.getElementById('selected-seat').textContent = selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None';
+
+            document.getElementById('seatNumber').value = selectedSeats.join(', ');
+            document.getElementById('totalPayment').value = totalPrice;
+        });
+    });
+</script>
+
+</body>
+</html>

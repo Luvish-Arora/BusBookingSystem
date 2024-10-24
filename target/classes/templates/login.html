@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <img src="/images/6681204.png" alt="profile-icon">
+    <div class="login-form">
+      <form id="instagram-login" action="/login" method="post">
+        <input type="text" id="username" name="username" placeholder="Phone number, username, or email" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+      </form>
+    
+      <!-- Display error message if login fails -->
+      <div class="error-message" style="color: red;">
+        <p th:if="${loginError}" th:text="${loginError}"></p>
+      </div>
+    
+      <div class="separator">
+        <span>OR</span>
+      </div>
+      <div class="social-login">
+          <button class="google-login">Log in with Google</button>
+          <button><a href="/" class="btn" style="color: aliceblue;">Go Back to Home</a></button>
+      </div>
+      <div class="footer">
+          <p>Don't have an account? <a href="#">Sign up</a></p>
+      </div>
+    </div>
+    
+  </div>
+</div>
+</body>
+</html>

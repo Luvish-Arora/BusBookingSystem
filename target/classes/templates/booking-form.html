@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Bus Ticket Booking Form</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Bus Ticket Booking Form</h2>
+        <p class="lead">Please fill in the details to book your ticket</p>
+        <form action="/submitBooking" method="post" class="booking-form">
+            <!-- Name input -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required><br>
+            
+            <!-- Bus Number dropdown -->
+            <label for="busNumber">Bus Number:</label>
+            <select id="busNumber" name="busNumber" required>
+                <option value="" disabled selected>Select your bus</option>
+                <option value="bus1">Bus 1  - Delhi to Agra</option>
+                <option value="bus2">Bus 2  - Banglore to Chennai</option>
+                <option value="bus3">Bus 3  - Pune to Mumbai</option>
+            </select><br>
+            
+            <!-- Travel Date input -->
+            <label for="date">Travel Date:</label>
+            <input type="date" id="date" name="date" required><br>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn">Book Ticket</button>
+            <a href="/" class="btn" style="margin-top: -10px;">Go back to Home</a>
+        </form>
+    </div>
+</body>
+</html>
