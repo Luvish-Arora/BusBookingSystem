@@ -2,10 +2,14 @@ package com.example.busticketbooking.models;
 
 public class Booking {
     private String name;
+    private String email;       // New field for email
+    private String mobile;      // New field for mobile number
     private String busNumber;
     private String date;
     private String seatNumber;
     private double totalPayment;
+    private String userId;      // Existing field for user ID
+    private String userName;    // New field for username
 
     // Getters and Setters for all fields
     public String getName() {
@@ -14,6 +18,22 @@ public class Booking {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getBusNumber() {
@@ -46,5 +66,21 @@ public class Booking {
 
     public void setTotalPayment(double totalPayment) {
         this.totalPayment = totalPayment;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

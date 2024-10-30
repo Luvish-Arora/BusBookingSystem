@@ -28,19 +28,36 @@ public class UserService {
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            // Set the parameters for the SQL query
             stmt.setString(1, username);
             stmt.setString(2, password);
 
-            // Execute the query
             try (ResultSet resultSet = stmt.executeQuery()) {
-                // If a record exists, login is successful
                 return resultSet.next();
             }
 
         } catch (SQLException e) {
-            // Handle SQL exceptions
             System.err.println("SQL Exception during login: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Method to create a new user during signup
+    public boolean createUser(String username, String email, String password, String mobile) {
+        String insertQuery = "INSERT INTO user_login (user_name, email, password, mobile) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             PreparedStatement stmt = connection.prepareStatement(insertQuery)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+            stmt.setString(3, password);  // Optionally hash the password here
+            stmt.setString(4, mobile);
+
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("SQL Exception during signup: " + e.getMessage());
             return false;
         }
     }
