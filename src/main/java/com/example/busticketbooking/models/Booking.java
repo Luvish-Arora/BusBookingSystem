@@ -1,17 +1,27 @@
 package com.example.busticketbooking.models;
 
 public class Booking {
+    private Long id;            // Unique identifier for each booking
     private String name;
-    private String email;       // New field for email
-    private String mobile;      // New field for mobile number
+    private String email;       // Field for email
+    private String mobile;      // Field for mobile number
     private String busNumber;
     private String date;
     private String seatNumber;
     private double totalPayment;
-    private String userId;      // Existing field for user ID
-    private String userName;    // New field for username
+    private String userId;      // Field for user ID
+    private String userName;    // Field for username
 
     // Getters and Setters for all fields
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

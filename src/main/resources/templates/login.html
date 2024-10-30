@@ -11,6 +11,8 @@
     <img src="/images/6681204.png" alt="profile-icon">
     <div class="login-form">
       <form id="instagram-login" action="/login" method="post">
+        <!-- Hidden field to pass the action parameter -->
+        <input type="hidden" name="action" th:value="${action}">
         <input type="text" id="username" name="username" placeholder="Phone number, username, or email" required>
         <input type="password" id="password" name="password" placeholder="Password" required>
         <button type="submit">Log In</button>
@@ -32,8 +34,6 @@
           <p>Don't have an account? <a href="/signup">Sign up</a></p>
       </div>
     </div>
-    
   </div>
-</div>
 </body>
 </html>

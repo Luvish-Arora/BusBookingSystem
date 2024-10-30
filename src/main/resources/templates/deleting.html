@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/deleting.css">
+    <title>Manage My Bookings</title>
+</head>
+<body>
+    <div class="container">
+        <h1>My Bookings</h1>
+
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+        <table class="booking-table">
+            <thead>
+                <tr>
+                    <th>Bus Number</th>
+                    <th>Date</th>
+                    <th>Seat Number</th>
+                    <th>Total Payment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.busNumber}"></td>
+                    <td th:text="${booking.date}"></td>
+                    <td th:text="${booking.seatNumber}"></td>
+                    <td th:text="${booking.totalPayment}"></td>
+                    <td>
+                        <form method="POST" th:action="@{/deleteBooking}">
+                            <input type="hidden" name="bookingId" th:value="${booking.id}">
+                            <input type="hidden" name="busNumber" th:value="${booking.busNumber}">
+                            <button type="submit" class="btn btn-danger">Cancel Booking</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="button-container">
+            <a href="/" class="btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
