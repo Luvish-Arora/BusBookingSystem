@@ -8,12 +8,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import com.example.busticketbooking.models.Booking;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 @Controller
 @SessionAttributes({"booking", "username", "action"}) // Store booking, username, and action in session
 public class BookingController {
+
+    private String booking;
+    private String date;
 
     @Autowired
     private UserService userService;
@@ -94,10 +112,21 @@ public class BookingController {
 
     // Show seat selection page
     @GetMapping("/booking-seat")
-    public String showBookingSeat(@ModelAttribute("booking") Booking booking, Model model) {
-        model.addAttribute("booking", booking);
-        return "booking-seat";
-    }
+public String showBookingSeat(@ModelAttribute("booking") Booking booking, Model model) {
+    // Add attributes to the model
+    model.addAttribute("booking", booking);
+    model.addAttribute("busNumber", booking.getBusNumber()); // Assuming busNumber is set in the Booking object
+    model.addAttribute("date", booking.getDate());
+    this.booking=booking.getBusNumber();
+    date=booking.getDate();
+
+    // Print the busNumber and date to the console for debugging
+    System.out.println("Bus Number: " + booking.getBusNumber());
+    System.out.println("Date: " + booking.getDate());
+
+    return "booking-seat";
+}
+
 
     // Confirm seat selection and complete booking
     @PostMapping("/confirmSeat")
@@ -137,5 +166,15 @@ public class BookingController {
         model.addAttribute("success", success ? "Booking deleted successfully." : "Failed to delete booking.");
         return "redirect:/manageBookings";
     }
+
+    @GetMapping("/getBookedSeats")
+    @ResponseBody
+    public List<String> getBooked() {
+        List<String> a=bookingService.getBookedSeats(booking, date);
+        System.out.println(a);
+        return a;
+    
+}
+
 }
     

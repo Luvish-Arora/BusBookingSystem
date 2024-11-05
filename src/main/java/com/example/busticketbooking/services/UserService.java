@@ -21,43 +21,58 @@ public class UserService {
     @Value("${spring.datasource.password}")
     private String dbPassword;
 
-    // Method to validate login credentials
+    // Validates login credentials
     public boolean validateLogin(String username, String password) {
-        String query = "SELECT * FROM user_login WHERE user_name = ? AND password = ?";
-
+        String query = "SELECT 1 FROM user_login WHERE user_name = ? AND password = ?";
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
              PreparedStatement stmt = connection.prepareStatement(query)) {
-
             stmt.setString(1, username);
             stmt.setString(2, password);
-
             try (ResultSet resultSet = stmt.executeQuery()) {
                 return resultSet.next();
             }
-
         } catch (SQLException e) {
-            System.err.println("SQL Exception during login: " + e.getMessage());
+            System.err.println("SQL Exception during login validation: " + e.getMessage());
             return false;
         }
     }
 
-    // Method to create a new user during signup
+    // Creates a new user during signup
     public boolean createUser(String username, String email, String password, String mobile) {
-        String insertQuery = "INSERT INTO user_login (user_name, email, password, mobile) VALUES (?, ?, ?, ?)";
+        if (userExists(username)) {
+            System.err.println("User already exists with username: " + username);
+            return false;
+        }
 
+        String insertQuery = "INSERT INTO user_login (user_name, email, password, mobile) VALUES (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
              PreparedStatement stmt = connection.prepareStatement(insertQuery)) {
 
             stmt.setString(1, username);
             stmt.setString(2, email);
-            stmt.setString(3, password);  // Optionally hash the password here
+            stmt.setString(3, password);  // Consider using a hashed password
             stmt.setString(4, mobile);
 
-            stmt.executeUpdate();
-            return true;
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("SQL Exception during signup: " + e.getMessage());
+            System.err.println("SQL Exception during user creation: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Helper method to check if a username already exists
+    private boolean userExists(String username) {
+        String query = "SELECT 1 FROM user_login WHERE user_name = ?";
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception while checking user existence: " + e.getMessage());
             return false;
         }
     }
