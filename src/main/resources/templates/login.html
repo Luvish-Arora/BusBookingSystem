@@ -1,39 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
-  <link rel="stylesheet" href="/css/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-  <div class="login-container">
-    <img src="/images/6681204.png" alt="profile-icon">
-    <div class="login-form">
-      <form id="instagram-login" action="/login" method="post">
-        <!-- Hidden field to pass the action parameter -->
-        <input type="hidden" name="action" th:value="${action}">
-        <input type="text" id="username" name="username" placeholder="Phone number, username, or email" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
-        <button type="submit">Log In</button>
-      </form>
-    
-      <!-- Display error message if login fails -->
-      <div class="error-message" style="color: red;">
-        <p th:if="${loginError}" th:text="${loginError}"></p>
-      </div>
-    
-      <div class="separator">
-        <span>OR</span>
-      </div>
-      <div class="social-login">
-          <button class="google-login">Log in with Google</button>
-          <button><a href="/" class="btn" style="color: aliceblue;">Go Back to Home</a></button>
-      </div>
-      <div class="footer">
-          <p>Don't have an account? <a href="/signup">Sign up</a></p>
-      </div>
+    <div class="login-container">
+        <img src="/images/6681204.png" alt="profile-icon">
+        <div class="login-form">
+            <form th:action="@{/login}" method="post">
+                <input type="hidden" name="action" th:value="${action}">
+                
+                <div class="form-group">
+                    <input type="text" 
+                           id="identifier" 
+                           name="identifier" 
+                           placeholder="Phone number or email" 
+                           th:value="${identifier}">
+                    <!-- Error message for identifier -->
+                    <div th:if="${identifierError}" class="error-message" th:text="${identifierError}"></div>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           placeholder="Password">
+                    <!-- Error message for password -->
+                    <div th:if="${passwordError}" class="error-message" th:text="${passwordError}"></div>
+                </div>
+                
+                <button type="submit">Log In</button>
+                
+                <!-- General error message -->
+                <div th:if="${loginError}" class="error-message" th:text="${loginError}"></div>
+            </form>
+            
+            <div class="separator">
+                <span>OR</span>
+            </div>
+            <div class="social-login">
+                <button class="google-login">Log in with Google</button>
+                <button><a href="/" class="btn" style="color: aliceblue;">Go Back to Home</a></button>
+            </div>
+            <div class="footer">
+                <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.example.busticketbooking.controllers;
 import com.example.busticketbooking.models.Booking;
 import com.example.busticketbooking.services.BookingService;
 import com.example.busticketbooking.services.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
+
 import com.example.busticketbooking.models.Booking;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,46 +40,119 @@ public class BookingController {
     private String booking;
     private String date;
 
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private BookingService bookingService;
 
-    // Show the index page
-    @GetMapping("/")
-    public String showIndex(Model model) {
-        return "index";
+    @Autowired
+    private UserService userService;
+    
+    private static final Map<String, LoginAttempt> loginAttempts = new ConcurrentHashMap<>();
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{10}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    
+    private static class LoginAttempt {
+        int attempts;
+        LocalDateTime lastAttempt;
+        
+        LoginAttempt() {
+            this.attempts = 1;
+            this.lastAttempt = LocalDateTime.now();
+        }
+        
+        void increment() {
+            this.attempts++;
+            this.lastAttempt = LocalDateTime.now();
+        }
     }
-
-    // Show the login page
+    
     @GetMapping("/login")
     public String showLoginForm(Model model, @RequestParam(value = "action", required = false) String action) {
-        model.addAttribute("loginError", null);
-        model.addAttribute("action", action); // Pass action to the login form
+        model.addAttribute("action", action);
         return "login";
     }
-
-    // Process login and redirect to the appropriate page based on the action
+    
     @PostMapping("/login")
-    public String processLogin(@RequestParam("username") String username,
-                               @RequestParam("password") String password,
-                               @RequestParam(value = "action", required = false) String action,
-                               Model model) {
-        if (userService.validateLogin(username, password)) {
-            model.addAttribute("username", username); // Store username in session
-            model.addAttribute("action", action); // Store action in session
-
-            // Check if 'action' parameter is set to 'delete' and redirect accordingly
+public String processLogin(@RequestParam("identifier") String identifier,
+                         @RequestParam("password") String password,
+                         @RequestParam(value = "action", required = false) String action,
+                         Model model) {
+    
+    boolean hasError = false;
+    
+    // Preserve the entered identifier
+    model.addAttribute("identifier", identifier);
+    model.addAttribute("action", action);
+    
+    // Validate username
+    if (identifier == null || identifier.trim().isEmpty()) {
+        model.addAttribute("identifierError", "Please enter your phone number or email");
+        hasError = true;
+    } else if (!isValidIdentifier(identifier.trim())) {
+        model.addAttribute("identifierError", "Please enter a valid phone number or email address");
+        hasError = true;
+    }
+    
+    // validating password
+    if (password == null || password.trim().isEmpty()) {
+        model.addAttribute("passwordError", "Please enter your password");
+        hasError = true;
+    } else if (password.length() < 6) {
+        model.addAttribute("passwordError", "Password must be at least 6 characters long");
+        hasError = true;
+    }
+    
+    if (hasError) {
+        return "login";
+    }
+    
+    //checking for 5 login attemps-in one session
+    LoginAttempt attempt = loginAttempts.get(identifier);
+    if (attempt != null && attempt.attempts >= 5) {
+        if (attempt.lastAttempt.plusMinutes(15).isAfter(LocalDateTime.now())) {
+            long minutesLeft = Duration.between(LocalDateTime.now(), 
+                attempt.lastAttempt.plusMinutes(15)).toMinutes();
+            model.addAttribute("loginError", 
+                "Too many failed attempts. Please try again in " + 
+                minutesLeft + " minutes");
+            return "login";
+        } else {
+            loginAttempts.remove(identifier);
+        }
+    }
+    
+    try {
+        
+        boolean loginSuccessful = userService.validateLogin(identifier, password);
+        System.out.println(loginSuccessful);
+        if (loginSuccessful) {
+            loginAttempts.remove(identifier);
+            model.addAttribute("username", identifier);
+            
             if ("delete".equals(action)) {
-                return "redirect:/manageBookings"; // Redirect to manage bookings
+                return "redirect:/manageBookings";
             } else {
-                return "redirect:/booking"; // Redirect to booking form
+                return "redirect:/booking";
             }
         } else {
-            model.addAttribute("loginError", "Invalid username or password. Please try again.");
+            if (attempt == null) {
+                loginAttempts.put(identifier, new LoginAttempt());
+            } else {
+                attempt.increment();
+            }
+            
+            model.addAttribute("loginError", "Invalid credentials");
             return "login";
         }
+    } catch (Exception e) {
+        model.addAttribute("loginError", "An error occurred. Please try again later");
+        return "login";
+    }
+}
+    
+    private boolean isValidIdentifier(String identifier) {
+        return PHONE_PATTERN.matcher(identifier).matches() || 
+               EMAIL_PATTERN.matcher(identifier).matches();
     }
 
     // Show the signup page
