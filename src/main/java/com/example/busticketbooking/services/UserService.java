@@ -22,17 +22,18 @@ public class UserService {
     private String dbPassword;
 
     // Validates login credentials
-    public boolean validateLogin(String username, String password) {
-        String query = "SELECT 1 FROM user_login WHERE user_name = ? AND password = ?";
+    public boolean validateLogin(String identifier, String password) {
+        String query = "SELECT * FROM user_login WHERE (email = ? OR mobile = ?) AND password = ?";
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
              PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(1, identifier); // Set for email
+            stmt.setString(2, identifier); // Set for phone
+            stmt.setString(3, password);
             try (ResultSet resultSet = stmt.executeQuery()) {
-                return resultSet.next();
+                return true; // Returns true if user exists, false otherwise
             }
         } catch (SQLException e) {
-            System.err.println("SQL Exception during login validation: " + e.getMessage());
+            System.out.println("SQL Exception during login validation: " + e.getMessage());
             return false;
         }
     }

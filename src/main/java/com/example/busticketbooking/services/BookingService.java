@@ -22,22 +22,23 @@ public class BookingService {
     private String dbPassword;
 
     // Validates login credentials and returns the username if valid
-    public String validateLogin(String username, String password) {
-        String query = "SELECT user_name FROM user_login WHERE user_name = ? AND password = ?";
+    public boolean validateLogin(String identifier, String password) {
+        // Query to check both email and phone number
+        String query = "SELECT * FROM user_login WHERE (email = ? OR mobile = ?) AND password = ?";
+        System.out.println("Reached here-bb");
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
              PreparedStatement stmt = connection.prepareStatement(query)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
+            System.out.println("Reached here");
+            stmt.setString(1, identifier); // Set for email
+            stmt.setString(2, identifier); // Set for phone
+            stmt.setString(3, password);
             try (ResultSet resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("user_name");
-                }
+                return true; // Returns true if user exists, false otherwise
             }
         } catch (SQLException e) {
-            System.err.println("SQL Exception during login validation: " + e.getMessage());
+            System.out.println("SQL Exception during login validation: " + e.getMessage());
+            return false;
         }
-        return null;
     }
 
     // Saves the booking details into both a bus-specific table and a general bookings table
