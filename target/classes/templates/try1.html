@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeatSure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+
+        .header {
+            padding: 10px 0;
+            width: 100%;
+            height: 80px;
+            background-color: #87CEEB;
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .logo-title img {
+            width: 150px;
+            height: 150px;
+            border-radius: 80%;
+            margin-left: -225px;
+            border-color: #87CEEB;
+            
+        }
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: white;
+            padding: 5px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 54px;
+            line-height: 1.3;
+        }
+
+        .login {
+            position: absolute;
+            margin-left: 750px;
+            margin-top: 20px;
+            top: 20px;
+            color: purple;
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .try-booking {
+            background-color: #42A5F5;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: -40px;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
+
+        .bus-details {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .bus-details h2 {
+            margin-bottom: 15px;
+        }
+
+        .bus-grid {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    max-height: 180px; /* Adjust based on row height */
+    overflow-y: auto;
+}
+
+.bus-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 100px 120px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+        .seats {
+            font-weight: bold;
+        }
+
+        .seats-high {
+            color: #2ecc71;
+        }
+
+        .seats-low {
+            color: #e74c3c;
+        }
+
+        .footer {
+            font-weight: bold;
+            background-color: #87CEEB;
+            color: black;
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"></div>
+    
+    <div class="content-wrapper">
+        <button class="login">Login</button>
+        
+        <div class="logo-title">
+            <img src="/images/logo5.png" alt="SeatSure Logo" class="logo">
+            <h1 class="title">SeatSure – Where<br>Every Trip Begins with <br> Trust!<br></h1>
+        </div>
+
+        <button class="try-booking">Try Booking</button>
+
+        <div class="bus-details">
+            <h2>Bus Details:-</h2>
+            <div class="bus-grid">
+                <div class="bus-row">
+                    <div>1</div>
+                    <div>Delhi to Agra</div>
+                    <div>11:30</div>
+                    <div>12/02/25</div>
+                    <div>Seats left: <span class="seats seats-low">7</span></div>
+                </div>
+                <div class="bus-row">
+                    <div>1</div>
+                    <div>Delhi to Agra</div>
+                    <div>11:30</div>
+                    <div>12/02/25</div>
+                    <div>Seats left: <span class="seats seats-high">19</span></div>
+                </div>
+                <div class="bus-row">
+                    <div>1</div>
+                    <div>Delhi to Agra</div>
+                    <div>11:30</div>
+                    <div>12/02/25</div>
+                    <div>Seats left: <span class="seats seats-high">12</span></div>
+                </div>
+                <div class="bus-row">
+                    <div>1</div>
+                    <div>Delhi to Agra</div>
+                    <div>11:30</div>
+                    <div>12/02/25</div>
+                    <div>Seats left: <span class="seats seats-high">12</span></div>
+                </div>
+                <div class="bus-row">
+                    <div>1</div>
+                    <div>Delhi to Agra</div>
+                    <div>11:30</div>
+                    <div>12/02/25</div>
+                    <div>Seats left: <span class="seats seats-high">12</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Contact details</p>
+        <p>+9124125235</p>
+        <p>support@gmail.com</p>
+    </div>
+</body>
+</html>

@@ -30,6 +30,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -255,6 +258,13 @@ public String showBookingSeat(@ModelAttribute("booking") Booking booking, Model 
         return a;
     
 }
+
+@GetMapping("/try")
+public String getMethodName(@RequestParam(required=false) String param, Model model) {
+    model.addAttribute("param", param);
+    return "try1";
+}
+
 
 }
     
